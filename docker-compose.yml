@@ -1,7 +1,7 @@
 version: "3"
 services:
   SonarQube:
-    image: SonarQube:community
+    image: sonatqube:latest
     depends_on:
       - db
     environment:
@@ -9,9 +9,9 @@ services:
       SONAR_JDBC_USERNAME: sonartest
       SONAR_JDBC_PASSWORD: sonartest
     volumes:
-      - SonarQube_data:/opt/SonarQube/data
-      - SonarQube_extensions:/opt/SonarQube/extensions
-      - SonarQube_logs:/opt/SonarQube/logs
+      - sonatqube_data:/opt/sonatqube/data
+      - sonatqube_extensions:/opt/sonatqube/extensions
+      - sonatqube_logs:/opt/sonatqube/logs
     ports:
       - "9000:9000"
   db:
@@ -23,8 +23,8 @@ services:
       - postgresql:/var/lib/postgresql
       - postgresql_data:/var/lib/postgresql/data
 volumes:
-  SonarQube_data:
-  SonarQube_extensions:
-  SonarQube_logs:
+  sonatqube_data:
+  sonatqube_extensions:
+  sonatqube_logs:
   postgresql:
   postgresql_data:
