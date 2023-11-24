@@ -1,5 +1,8 @@
 version: "1.0"
-# sonarQube service
+
+services:
+  
+  # sonarQube service
   sonarQube:
     image: sonarqube
     container_name: sonarQube
