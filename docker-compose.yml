@@ -1,23 +1,5 @@
 version: "1.0"
 
-services:
-  # gitlab service
-  gitlab:
-    container_name: gitlab-repo
-    image: gitlab/gitlab-ee:latest
-    ports:
-      - "443:443"
-      - "80:80"
-      - "22:22"
-    volumes:
-      - gitlab-config:/etc/gitlab
-      - gitlab-logs:/var/log/gitlab
-      - gitlab-data:/var/opt/gitlab
-    shm_size: "256m"
-    networks:
-      - devops
-
-  
   # sonarQube service
   sonarQube:
     image: sonarqube
