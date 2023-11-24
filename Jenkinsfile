@@ -1,51 +1,21 @@
 pipeline{
-    agent any
-
-    tools {
-         maven 'maven'
-         jdk 'java'
-    }
-
     stages{
         stage('checkout'){
             steps{
-                checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'github access', url: 'https://github.com/sreenivas449/java-hello-world-with-maven.git']]])
+                sh 'rm -rf *'
+				sh 'git clone https://github.com/ganeshghube/webgoat.git'
             }
         }
-        stage('build'){
+        stage('build and code-quality'){
             steps{
-               bat 'mvn package'
+               sh 'mvn clean install sonar:sonar -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url=http://localhost:9000           -Dsonar.token=squ_39020d60b148d7150705032eb64cb1d7f4a0699e'
             }
         }
-        stage('copying the artifact'){
+        stage('scan'){
             steps{
-                stash includes: 'target/jb-hello-world-maven-0.4.0.jar', name: 'stash-jar'
+                sh 'pwd'
             }
         }
-        stage('stop service'){
-            steps{
-                bat 'net stop tomcat-dev'
-            }
-        }
-
-        stage('unstash artifact'){
-            steps{
-                dir('C:\\tomcats\\DEV\\apache-tomcat-8.5.76\\webapps') {
-                unstash 'stash-jar'
-                bat '''
-                del *.war
-                del *.jar
-                copy C:\\tomcats\\DEV\\apache-tomcat-8.5.76\\webapps\\target\\jb-hello-world-maven-0.4.0.jar  C:\\tomcats\\DEV\\apache-tomcat-8.5.76\\webapps\\
-                '''
-            }
-
-            }
-        }
-        stage('start service'){
-            steps{
-                bat 'net start tomcat-dev'
-            }
-        }
-
+        
     }
 }
