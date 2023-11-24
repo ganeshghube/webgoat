@@ -9,7 +9,8 @@ pipeline{
     stages{
         stage('checkout'){
             steps{
-                sh 'git clone https://github.com/ganeshghube/webgoat.git'
+                sh 'rm -rf *'
+				sh 'git clone https://github.com/ganeshghube/webgoat.git'
             }
         }
         stage('Build and Code Quality'){
