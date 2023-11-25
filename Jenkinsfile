@@ -3,8 +3,7 @@ pipeline{
     stages{
         stage('checkout'){
             steps{
-                sh 'pwd'
-               // git branch: 'main', changelog: false, credentialsId: 'gitscm', poll: false, url: 'https://github.com/ganeshghube/javasample.git'
+                sh 'git clone https://github.com/ganeshghube/javasample.git'
             }
         }
         stage('Build and Code Quality'){
