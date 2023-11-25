@@ -32,6 +32,7 @@ pipeline{
         }
         stage('OWASP Dependency-Check Vulnerabilities') {
         steps {
+            sh 'pwd'
         //sh "cd simple-java-maven-app && mvn org.owasp:dependency-check-maven:aggregate"
         }
         }
