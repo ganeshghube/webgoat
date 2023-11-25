@@ -32,7 +32,7 @@ pipeline{
         }
         stage ('OWASP Dependency-Check Vulnerabilities') {
             steps {
-              sh   "dependency-check.sh --project "ganesh" --scan '/java/application/lib'"
+              sh   "dependency-check.sh --project "ganesh" --scan '/var/lib/jenkins/workspace/test/simple-java-maven-app/target/'"
             }
         }    
 
