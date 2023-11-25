@@ -13,19 +13,18 @@ services:
     networks:
       - devops
 
-  WebGoat:
-    image: webgoat
-    container_name: webgoat
-    environment: 
-       - WEBWOLF_PORT=9090
-    ports: 
-      - "9090:9090"
+  webgoat:
+    image: webgoat/webgoat-8.0:v8.0.0.M25
+    environment:
+      - WEBWOLF_HOST=localhost
+      - WEBWOLF_PORT=9090
+    ports:
       - "8081:8081"
+      - "9001:9001"
     networks:
       - devops
 
-
-
+  
 volumes:
   gitlab-config:
   gitlab-logs:
