@@ -40,7 +40,7 @@ pipeline{
         
         dependencyCheckPublisher pattern: 'dependency-check-report.xml'
         }
-    
+        }
     
     
     }
