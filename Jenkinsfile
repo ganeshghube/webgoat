@@ -9,6 +9,7 @@ pipeline{
         stage('git'){
             steps{
                 sh 'git clone https://github.com/jenkins-docs/simple-java-maven-app.git'
+                sh 'cd simple-java-maven-app'
                  }
         }
         stage('Build'){
