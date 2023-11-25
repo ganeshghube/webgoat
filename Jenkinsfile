@@ -2,7 +2,9 @@ pipeline{
     agent any
     stages{
         stage('checkout'){
-            git branch: 'main', credentialsId: 'gitscm', url: 'https://github.com/ganeshghube/javasample.git'
+            steps{
+                git branch: 'main', changelog: false, credentialsId: 'gitscm', poll: false, url: 'https://github.com/ganeshghube/javasample.git'
+            }
         }
         stage('Build and Code Quality'){
             steps{
