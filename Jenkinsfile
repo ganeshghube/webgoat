@@ -25,6 +25,10 @@ pipeline{
                 sh "cd simple-java-maven-app && mvn -B -Denforcer.skip=true clean install sonar:sonar -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url='http://localhost:9000' -Dsonar.token=squ_39020d60b148d7150705032eb64cb1d7f4a0699e"
             }
         }
+        stage('Code mvn test'){
+            steps{
+                sh "cd simple-java-maven-app && mvn test
+        }
 
     }
 }
