@@ -2,9 +2,9 @@ pipeline{
     agent any
     stages{
         stage('checkout'){
-            steps{
-                git branch: 'main', changelog: false, credentialsId: 'gitscm', poll: false, url: 'https://github.com/ganeshghube/javasample.git'
-            }
+            withCredentials([usernamePassword(credentialsId: 'git', passwordVariable: 'password', usernameVariable: 'username')]) {
+            sh 'git clone https://github.com/ganeshghube/javasample.git'
+        }
         }
         stage('Build and Code Quality'){
             steps{
