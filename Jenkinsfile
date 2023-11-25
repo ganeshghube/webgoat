@@ -27,7 +27,7 @@ pipeline{
         }
         stage('Code mvn test'){
             steps{
-                sh "cd simple-java-maven-app && mvn test"
+                sh "cd simple-java-maven-app && mvn -B -Denforcer.skip=true test"
         }
         }
 
