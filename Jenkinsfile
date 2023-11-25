@@ -20,9 +20,9 @@ pipeline{
                 
             }
         }
-        stage('deploy'){
+        stage('Code Quality'){
             steps{
-                sh 'pwd'
+                sh 'mvn -B -Denforcer.skip=true clean install sonar:sonar -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url=http://localhost:9000 -Dsonar.token=squ_39020d60b148d7150705032eb64cb1d7f4a0699e'
             }
         }
 
