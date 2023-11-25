@@ -30,6 +30,13 @@ pipeline{
                 sh "cd simple-java-maven-app && mvn -B -Denforcer.skip=true test"
         }
         }
+        stage('Code Coverage Junit'){
+            steps{
+                junit 'target/surefire-reports/**/*.xml'
+        }
+        }
+
+        }
 
     }
 }
