@@ -1,11 +1,10 @@
 pipeline{
     agent any
-
     stages{
         stage('checkout'){
             steps{
-                sh 'rm -rf *'
-				sh 'git clone https://github.com/ganeshghube/webgoat.git'
+                sh 'pwd'
+
             }
         }
         stage('Build and Code Quality'){
