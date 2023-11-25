@@ -32,7 +32,7 @@ pipeline{
         }
         stage('OWASP Dependency-Check Vulnerabilities') {
         steps {
-        sh "cd simple-java-maven-app && /dependency-check/bin/dependency-check.sh --out ./report --scan /app --format HTML --format JSON --prettyPrint --enableExperimental --disableAssembly"
+        sh "cd simple-java-maven-app && mvn org.owasp:dependency-check-maven:aggregate"
         }
         }
     
