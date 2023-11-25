@@ -29,6 +29,7 @@ pipeline{
             steps{
                 sh "cd simple-java-maven-app && mvn test"
         }
+        }
 
     }
 }
