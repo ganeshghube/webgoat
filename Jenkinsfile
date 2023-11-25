@@ -30,10 +30,13 @@ pipeline{
                 sh "cd simple-java-maven-app && mvn -B -Denforcer.skip=true test"
         }
         }
-        stage('Code Coverage Junit'){
-            steps{
-                junit 'target/surefire-reports/**/*.xml'
-        }
+        stage("Quality Gate"){
+          timeout(time: 10, unit: 'MINUTES') {
+              def qg = waitForQualityGate()
+              if (qg.status != 'OK') {
+                  error "Pipeline aborted due to quality gate failure: ${qg.status}"
+              }
+          }
         }
 
     }
