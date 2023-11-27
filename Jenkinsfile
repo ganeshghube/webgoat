@@ -18,7 +18,6 @@ pipeline{
         stage('git'){
             steps{
                 script {
-                         sh 'rm -rf *'
                          echo "<--Repo Initialization-->"
                          echo """
                          The current Repo is:
