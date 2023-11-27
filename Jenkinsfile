@@ -12,6 +12,7 @@ pipeline{
     stages{
         stage('checkout'){
             steps{
+                sh 'rm -rf *'
                 checkout scm
                  }
         }
@@ -19,7 +20,6 @@ pipeline{
             steps{
                 script {
                         sh """
-                            rm -rf *
                             git clone ${params.TARGET}
                             """
                                               }
