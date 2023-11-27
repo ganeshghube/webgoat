@@ -29,7 +29,7 @@ pipeline{
         }
         stage('Build'){
             steps{
-              //sh 'mvn clean install sonar:sonar -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url=http://localhost:9000 -Dsonar.token=squ_39020d60b148d7150705032eb64cb1d7f4a0699e'
+              //sh 'mvn clean install sonar:sonar -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url=http://localhost:9000 -Dsonar.token=squ_64ab57a2a4d9329f633895ef209da970931236d0'
                 sh 'cd simple-java-maven-app && mvn -B -Denforcer.skip=true clean package'
                 sh 'pwd'
                 
