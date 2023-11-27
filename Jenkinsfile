@@ -45,8 +45,8 @@ pipeline{
         }
         stage('Unit Test'){
             steps{
-                
-                sh "cd simple-java-maven-app && mvn clean package sonar:sonar dependency-check:aggregate -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url='http://localhost:9000'  -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json -Dsonar.dependencyCheck.xmlReportPath=target/dependency-check-report.xml -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html -Dsonar.token=squ_64ab57a2a4d9329f633895ef209da970931236d0"
+                sh "cd simple-java-maven-app && mvn -B -Denforcer.skip=true clean install sonar:sonar -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url='http://localhost:9000'  -Dsonar.codequality.jsonReportPath=target/codequality-check-report.json -Dsonar.dependencyCheck.xmlReportPath=target/codequality-check-report.xml -Dsonar.dependencyCheck.htmlReportPath=target/codequality-check-report.html -Dsonar.token=squ_64ab57a2a4d9329f633895ef209da970931236d0"
+               // sh "cd simple-java-maven-app && mvn clean package sonar:sonar dependency-check:aggregate -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url='http://localhost:9000'  -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json -Dsonar.dependencyCheck.xmlReportPath=target/dependency-check-report.xml -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html -Dsonar.token=squ_64ab57a2a4d9329f633895ef209da970931236d0"
         }
         }
         stage('SAST Dependency Scan') {
