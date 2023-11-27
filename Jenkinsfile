@@ -37,7 +37,7 @@ pipeline{
         }
         }
         stage('OWASP Dependency-Check Vulnerabilities') {
-        teps {
+        steps {
         dependencyCheck additionalArguments: ''' 
                     -o './'
                     -s './'
