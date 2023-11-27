@@ -52,7 +52,7 @@ pipeline{
         stage('SAST Dependency Scan') {
         steps {
             //sh 'cd simple-java-maven-app && bearer scan .'
-            sh "cd simple-java-maven-app && mvn org.owasp:dependency-check-maven:aggregate"
+            //sh "cd simple-java-maven-app && mvn org.owasp:dependency-check-maven:aggregate"
         }
         }
         stage('OWASP Dependency-Check Vulnerabilities') {
