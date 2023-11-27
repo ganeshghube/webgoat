@@ -23,7 +23,7 @@ pipeline{
                          echo """
                          The current Repo is:
                              Scan Type: ${params.Repo}
-                             git clone Target: ${params.TARGET}
+                             git clone ${params.TARGET}
                          """
                      }
                 //sh 'rm -rf *'
