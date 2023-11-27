@@ -18,11 +18,12 @@ pipeline{
         stage('git'){
             steps{
                 script {
+                         sh 'rm -rf *'
                          echo "<--Repo Initialization-->"
                          echo """
                          The current Repo is:
                              Scan Type: ${params.Repo}
-                             Target: ${params.TARGET}
+                             git clone Target: ${params.TARGET}
                          """
                      }
                 //sh 'rm -rf *'
