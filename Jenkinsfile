@@ -23,8 +23,8 @@ pipeline{
                          echo """
                          The current Repo is:
                              Scan Type: ${params.Repo}
-                             git clone ${params.TARGET}
-                         """
+                             """
+                         sh 'git clone ${params.TARGET}'
                      }
                 //sh 'rm -rf *'
                 //sh 'git clone https://github.com/jenkins-docs/simple-java-maven-app.git'
