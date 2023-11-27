@@ -30,7 +30,7 @@ pipeline{
                 sh "cd simple-java-maven-app && mvn -B -Denforcer.skip=true test"
         }
         }
-        stage('OWASP Dependency-Check Vulnerabilities') {
+        stage('OWASP') {
         steps {
             sh 'pwd'
         //sh "cd simple-java-maven-app && mvn org.owasp:dependency-check-maven:aggregate"
