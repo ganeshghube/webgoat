@@ -1,5 +1,14 @@
 pipeline{
     agent any
+    parameters {
+         choice  choices: ["Repo"],
+                 description: 'Type of scan that is going to perform inside the container',
+                 name: 'REPO_NAME'
+ 
+         string defaultValue: "https://github.com/jenkins-docs/simple-java-maven-app.git",
+                 description: 'Target Repo to scan',
+                 name: 'TARGET'
+      }
     stages{
         stage('checkout'){
             steps{
@@ -8,8 +17,16 @@ pipeline{
         }
         stage('git'){
             steps{
-                sh 'rm -rf *'
-                sh 'git clone https://github.com/jenkins-docs/simple-java-maven-app.git'
+                script {
+                         echo "<--Repo Initialization-->"
+                         echo """
+                         The current Repo is:
+                             Scan Type: ${params.Repo}
+                             Target: ${params.TARGET}
+                         """
+                     }
+                //sh 'rm -rf *'
+                //sh 'git clone https://github.com/jenkins-docs/simple-java-maven-app.git'
                  }
         }
         stage('Build'){
