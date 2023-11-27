@@ -32,24 +32,24 @@ pipeline{
         stage('Build'){
             steps{
               //sh 'mvn clean install sonar:sonar -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url=http://localhost:9000 -Dsonar.token=squ_64ab57a2a4d9329f633895ef209da970931236d0'
-                sh 'mvn -B -Denforcer.skip=true clean package'
+                sh 'cd simple-java-maven-app && mvn -B -Denforcer.skip=true clean package'
                 sh 'pwd'
                 
             }
         }
         stage('Code Quality'){
             steps{
-                sh "mvn -B -Denforcer.skip=true clean install sonar:sonar -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url='http://localhost:9000'  -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json -Dsonar.dependencyCheck.xmlReportPath=target/dependency-check-report.xml -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html -Dsonar.token=squ_64ab57a2a4d9329f633895ef209da970931236d0"
+                sh "cd simple-java-maven-app && mvn -B -Denforcer.skip=true clean install sonar:sonar -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url='http://localhost:9000'  -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json -Dsonar.dependencyCheck.xmlReportPath=target/dependency-check-report.xml -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html -Dsonar.token=squ_64ab57a2a4d9329f633895ef209da970931236d0"
             }
         }
         stage('Unit Test'){
             steps{
-                sh "mvn -B -Denforcer.skip=true test"
+                sh "cd simple-java-maven-app && mvn -B -Denforcer.skip=true test"
         }
         }
         stage('SAST Dependency Scan') {
         steps {
-            sh 'bearer scan .'
+            sh 'cd simple-java-maven-app && bearer scan .'
             //sh "cd simple-java-maven-app && mvn org.owasp:dependency-check-maven:aggregate"
         }
         }
