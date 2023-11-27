@@ -18,12 +18,9 @@ pipeline{
         stage('git'){
             steps{
                 script {
-                         echo "<--Repo Initialization-->"
-                         echo """
-                         The current Repo is:
-                             Scan Type: ${params.Repo}
-                             sh git clone ${params.TARGET}
-                             """
+                        sh """
+                            git clone ${params.TARGET}
+                            """
                                               }
                 //sh 'rm -rf *'
                 //sh 'git clone https://github.com/jenkins-docs/simple-java-maven-app.git'
