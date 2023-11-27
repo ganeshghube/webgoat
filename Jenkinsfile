@@ -45,22 +45,23 @@ pipeline{
                 sh "cd simple-java-maven-app && mvn -B -Denforcer.skip=true test"
         }
         }
-        stage('OWASP') {
+        stage('SAST Dependency Scan') {
         steps {
-            sh 'pwd'
-            sh "cd simple-java-maven-app && mvn org.owasp:dependency-check-maven:aggregate"
+            sh 'bearer simple-java-maven-app'
+            //sh "cd simple-java-maven-app && mvn org.owasp:dependency-check-maven:aggregate"
         }
         }
         stage('OWASP Dependency-Check Vulnerabilities') {
         steps {
-        dependencyCheck additionalArguments: ''' 
-                    -o './'
-                    -s './'
-                    -f 'ALL' 
-                    --nvdApiKey '8379bbff-5498-4b5d-a586-5edb32a75e04'
-                    --prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
+        sh 'pwd'
+        //dependencyCheck additionalArguments: ''' 
+        //            -o './'
+        //            -s './'
+        //            -f 'ALL' 
+        //            --nvdApiKey '8379bbff-5498-4b5d-a586-5edb32a75e04'
+        //            --prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
         
-        dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+        //dependencyCheckPublisher pattern: 'dependency-check-report.xml'
       }
     }
     
