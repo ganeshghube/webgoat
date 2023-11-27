@@ -22,7 +22,7 @@ pipeline{
             steps{
                 script {
                         sh """
-                            git clone ${params.TARGET} .
+                            rm -rf .* && git clone ${params.TARGET} .
                             """
                                               }
                 //sh 'rm -rf *'
