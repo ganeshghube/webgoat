@@ -14,6 +14,8 @@ pipeline{
             steps{
                 sh 'rm -rf *'
                 checkout scm
+                sh 'pwd'
+                sh 'echo ${params.TARGET}'
                  }
         }
         stage('git'){
