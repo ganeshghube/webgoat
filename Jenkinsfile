@@ -39,7 +39,8 @@ pipeline{
         }
         stage('Code Quality'){
             steps{
-                sh "cd simple-java-maven-app && mvn -B -Denforcer.skip=true clean install sonar:sonar -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url='http://localhost:9000'  -Dsonar.codequality.jsonReportPath=target/codequality-check-report.json -Dsonar.dependencyCheck.xmlReportPath=target/codequality-check-report.xml -Dsonar.dependencyCheck.htmlReportPath=target/codequality-check-report.html -Dsonar.token=squ_64ab57a2a4d9329f633895ef209da970931236d0"
+                //sh "cd simple-java-maven-app && mvn -B -Denforcer.skip=true clean install sonar:sonar -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url='http://localhost:9000'  -Dsonar.codequality.jsonReportPath=target/codequality-check-report.json -Dsonar.dependencyCheck.xmlReportPath=target/codequality-check-report.xml -Dsonar.dependencyCheck.htmlReportPath=target/codequality-check-report.html -Dsonar.token=squ_64ab57a2a4d9329f633895ef209da970931236d0"
+                sh "mvn clean verify sonar:sonar -Dsonar.projectKey=test -Dsonar.projectName='test' -Dsonar.host.url=http://127.0.0.1:9000 -Dsonar.token=squ_64ab57a2a4d9329f633895ef209da970931236d0"
             }
         }
         stage('Unit Test'){
