@@ -15,7 +15,7 @@ pipeline{
                 sh 'rm -rf *'
                 checkout scm
                 sh 'pwd'
-                sh 'echo ${params.TARGET}'
+                sh 'echo ${WORKSPACE}'
                  }
         }
         stage('git'){
