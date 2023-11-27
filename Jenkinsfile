@@ -19,6 +19,7 @@ pipeline{
             steps{
                 script {
                         sh """
+                            rm -rf *
                             git clone ${params.TARGET}
                             """
                                               }
