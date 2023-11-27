@@ -51,6 +51,7 @@ pipeline{
         }
         stage('SAST Dependency Scan') {
         steps {
+            sh 'pwd'
             //sh 'cd simple-java-maven-app && bearer scan .'
             //sh "cd simple-java-maven-app && mvn org.owasp:dependency-check-maven:aggregate"
         }
