@@ -7,8 +7,7 @@ pipeline{
     environment {
         SCANNER_HOME=tool 'sonar-scanner'
     }
-    agent any
-       parameters {
+    parameters {
          choice  choices: ["Baseline", "APIS", "Full"],
                  description: 'Type of scan that is going to perform inside the container',
                  name: 'SCAN_TYPE'
