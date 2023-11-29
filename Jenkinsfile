@@ -12,7 +12,7 @@ pipeline{
                  description: 'Type of scan that is going to perform inside the container',
                  name: 'SCAN_TYPE'
  
-         string defaultValue: "http://127.0.0.1:8080",
+         string defaultValue: "http://3.236.65.221:8080/jpetstore",
                  description: 'Target URL to scan',
                  name: 'TARGET'
  
