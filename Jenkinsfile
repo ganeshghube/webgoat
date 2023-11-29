@@ -154,6 +154,7 @@ pipeline{
                              zap-api-scan.py \
                              -t $target \
                              -x report.xml \
+                             -r scan-report.html \
                              -I
                          """
                      }
@@ -162,7 +163,8 @@ pipeline{
                              docker exec owasp \
                              zap-full-scan.py \
                              -t $target \
-                             //-x report.xml
+                             -x report.xml \
+                             -r scan-report.html \
                              -I
                          """
                          //-x report-$(date +%d-%b-%Y).xml
