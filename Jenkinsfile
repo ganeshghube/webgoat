@@ -1,75 +1,207 @@
 pipeline{
     agent any
-    parameters {
-         choice  choices: ["Repo"],
-                 description: 'Type of scan that is going to perform inside the container',
-                 name: 'REPO_NAME'
- 
-         string defaultValue: "https://github.com/jenkins-docs/simple-java-maven-app.git",
-                 description: 'Target Repo to scan',
-                 name: 'TARGET'
-      }
-    stages{
-        stage('checkout'){
-            steps{
-                sh 'rm -rf *'
-                checkout scm
-                sh 'pwd'
-                sh 'echo ${WORKSPACE}'
-                 }
-        }
-        stage('git'){
-            steps{
-                script {
-                        sh """
-                            git clone ${params.TARGET}
-                            """
-                                              }
-                //sh 'rm -rf *'
-                //sh 'git clone https://github.com/jenkins-docs/simple-java-maven-app.git'
-                 }
-        }
-        stage('Build'){
-            steps{
-              //sh 'mvn clean install sonar:sonar -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url=http://localhost:9000 -Dsonar.token=squ_64ab57a2a4d9329f633895ef209da970931236d0'
-                sh 'cd simple-java-maven-app && mvn -B -Denforcer.skip=true clean package'
-                sh 'pwd'
-                
-            }
-        }
-        stage('Code Quality'){
-            steps{
-                sh "cd simple-java-maven-app && mvn -B -Denforcer.skip=true clean verify sonar:sonar -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url='http://localhost:9000'  -Dsonar.codequality.jsonReportPath=target/codequality-check-report.json -Dsonar.dependencyCheck.xmlReportPath=target/codequality-check-report.xml -Dsonar.dependencyCheck.htmlReportPath=target/codequality-check-report.html -Dsonar.token=squ_64ab57a2a4d9329f633895ef209da970931236d0"
-                //sh "cd simple-java-maven-app && mvn clean verify sonar:sonar -Dsonar.projectKey=test -Dsonar.projectName='test' -Dsonar.host.url=http://127.0.0.1:9000 -Dsonar.token=squ_64ab57a2a4d9329f633895ef209da970931236d0"
-            }
-        }
-        stage('Unit Test'){
-            steps{
-                sh "cd simple-java-maven-app && mvn -B -Denforcer.skip=true clean install sonar:sonar -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url='http://localhost:9000'  -Dsonar.codequality.jsonReportPath=target/codequality-check-report.json -Dsonar.dependencyCheck.xmlReportPath=target/codequality-check-report.xml -Dsonar.dependencyCheck.htmlReportPath=target/codequality-check-report.html -Dsonar.token=squ_64ab57a2a4d9329f633895ef209da970931236d0"
-               // sh "cd simple-java-maven-app && mvn clean package sonar:sonar dependency-check:aggregate -Dsonar.projectKey=ganesh -Dsonar.projectName='ganesh' -Dsonar.host.url='http://localhost:9000'  -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json -Dsonar.dependencyCheck.xmlReportPath=target/dependency-check-report.xml -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html -Dsonar.token=squ_64ab57a2a4d9329f633895ef209da970931236d0"
-        }
-        }
-        stage('SAST Dependency Scan') {
-        steps {
-            sh 'pwd'
-            //sh 'cd simple-java-maven-app && bearer scan .'
-            //sh "cd simple-java-maven-app && mvn org.owasp:dependency-check-maven:aggregate"
-        }
-        }
-        stage('OWASP Dependency-Check Vulnerabilities') {
-        steps {
-        sh 'pwd'
-        //dependencyCheck additionalArguments: ''' 
-        //            -o './'
-        //            -s './'
-        //            -f 'ALL' 
-        //            --nvdApiKey '8379bbff-5498-4b5d-a586-5edb32a75e04'
-        //            --prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
-        
-        //dependencyCheckPublisher pattern: 'dependency-check-report.xml'
-      }
+    tools {
+        jdk 'jdk17'
+        maven 'maven3'
     }
-    
-    
+    environment {
+        SCANNER_HOME=tool 'sonar-scanner'
+    }
+    agent any
+       parameters {
+         choice  choices: ["Baseline", "APIS", "Full"],
+                 description: 'Type of scan that is going to perform inside the container',
+                 name: 'SCAN_TYPE'
+ 
+         string defaultValue: "https://127.0.0.1:8080",
+                 description: 'Target URL to scan',
+                 name: 'TARGET'
+ 
+         booleanParam defaultValue: true,
+                 description: 'Parameter to know if wanna generate report.',
+                 name: 'GENERATE_REPORT'
+     }
+    stages{
+        stage ('clean Workspace'){
+            steps{
+                cleanWs()
+            }
+        }
+        stage ('checkout scm') {
+            steps {
+                git 'https://github.com/Aj7Ay/jpetstore-6.git'
+            }
+        }
+        stage ('maven compile') {
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+        stage ('maven Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage("Sonarqube Analysis "){
+            steps{
+                withSonarQubeEnv('sonar-server') {
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Petshop \
+                    -Dsonar.java.binaries=. \
+                    -Dsonar.projectKey=Petshop '''
+                }
+            }
+        }
+        stage("quality gate"){
+            steps {
+                script {
+                    sh 'pwd'
+                 // waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token' 
+                }
+           }
+        }
+        stage ('Build war file'){
+            steps{
+                sh 'mvn clean install -DskipTests=true'
+            }
+        }
+        stage("OWASP Dependency Check"){
+            steps{
+                dependencyCheck additionalArguments: '--scan ./ --format XML ', odcInstallation: 'DP-Check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+        stage ('Build and push to docker hub'){
+            steps{
+                script{
+                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
+                        sh "docker build -t petshop ."
+                        sh "docker tag petshop ganeshghube23/petshop:latest"
+                        sh "docker push ganeshghube23/petshop:latest"
+                   }
+                }
+            }
+        }
+        stage("TRIVY"){
+            steps{
+                sh "trivy image ganeshghube23/petshop:latest > trivy.txt"
+            }
+        }
+        stage ('Deploy to container'){
+            steps{
+                sh 'docker stop ganeshghube23/petshop:latest && docker rm ganeshghube23/petshop:latest'
+                sh 'docker run -d --name pet1 -p 8080:8080 ganeshghube23/petshop:latest'
+            }
+        }
+        stage('Pipeline Info') {
+                 steps {
+                     script {
+                         echo "<--Parameter Initialization-->"
+                         echo """
+                         The current parameters are:
+                             Scan Type: ${params.SCAN_TYPE}
+                             Target: ${params.TARGET}
+                             Generate report: ${params.GENERATE_REPORT}
+                         """
+                     }
+                 }
+         }
+	    stage('Setting up OWASP ZAP docker container') {
+             steps {
+                 script {
+                         echo "Pulling up last OWASP ZAP container --> Start"
+                         sh 'docker pull owasp/zap2docker-stable'
+                         echo "Pulling up last VMS container --> End"
+                         echo "Starting container --> Start"
+                         sh """
+                         docker run -dt --name owasp \
+                         owasp/zap2docker-stable \
+                         /bin/bash
+                         """
+                 }
+             }
+         }
+	    stage('Prepare wrk directory') {
+             when {
+                         environment name : 'GENERATE_REPORT', value: 'true'
+             }
+             steps {
+                 script {
+                         sh """
+                             docker exec owasp \
+                             mkdir /zap/wrk
+                         """
+                     }
+                 }
+         }
+	    stage('Scanning target on owasp container') {
+             steps {
+                 script {
+                     scan_type = "${params.SCAN_TYPE}"
+                     echo "----> scan_type: $scan_type"
+                     target = "${params.TARGET}"
+                     if(scan_type == "Baseline"){
+                         sh """
+                             docker exec owasp \
+                             zap-baseline.py \
+                             -t $target \
+                             -x report.xml \
+                             -r scan-report.html \
+                             -I
+                         """
+                     }
+                     else if(scan_type == "APIS"){
+                         sh """
+                             docker exec owasp \
+                             zap-api-scan.py \
+                             -t $target \
+                             -x report.xml \
+                             -I
+                         """
+                     }
+                     else if(scan_type == "Full"){
+                         sh """
+                             docker exec owasp \
+                             zap-full-scan.py \
+                             -t $target \
+                             //-x report.xml
+                             -I
+                         """
+                         //-x report-$(date +%d-%b-%Y).xml
+                     }
+                     else{
+                         echo "Something went wrong..."
+                     }
+                 }
+             }
+         }
+	    stage('Copy Report to Workspace'){
+             steps {
+                 script {
+                     sh '''
+                         docker cp owasp:/zap/wrk/report.xml ${WORKSPACE}/report.xml
+                         docker cp owasp:/zap/wrk/scan-report.html ${WORKSPACE}/scan-report.html
+                     '''
+                 }
+             }
+         }
+        stage('Remove all Dockers images and containers ') {
+           steps{
+                    sh 'docker stop $(docker ps -a -q)'
+                    sh 'docker rm $(docker ps -a -q)'
+                    sh 'docker image ls -q | xargs -I {} docker image rm -f {}'
+    }   
+      }
+
+   }
+        post {
+        always {
+        emailext attachLog: true,
+            subject: "'${currentBuild.result}'",
+            body: "Project: ${env.JOB_NAME}<br/>" +
+                "Build Number: ${env.BUILD_NUMBER}<br/>" +
+                "URL: ${env.BUILD_URL}<br/>",
+            to: 'ganesh.ghube@gmail.com',
+            attachmentsPattern: 'trivy.txt'
+        }
     }
 }
