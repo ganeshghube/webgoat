@@ -12,7 +12,7 @@ pipeline{
                  description: 'Type of scan that is going to perform inside the container',
                  name: 'SCAN_TYPE'
  
-         string defaultValue: "https://127.0.0.1:8080",
+         string defaultValue: "http://127.0.0.1:8080",
                  description: 'Target URL to scan',
                  name: 'TARGET'
  
