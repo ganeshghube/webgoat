@@ -185,9 +185,10 @@ pipeline{
          }
         stage('Remove all Dockers images and containers ') {
            steps{
-                    sh 'docker stop $(docker ps -a -q)'
-                    sh 'docker rm $(docker ps -a -q)'
-                    sh 'docker image ls -q | xargs -I {} docker image rm -f {}'
+                    sh 'pwd'
+                    //sh 'docker stop $(docker ps -a -q)'
+                    //sh 'docker rm $(docker ps -a -q)'
+                    //sh 'docker image ls -q | xargs -I {} docker image rm -f {}'
     }   
       }
 
