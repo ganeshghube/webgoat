@@ -87,7 +87,7 @@ pipeline{
         }
         stage ('Deploy to container'){
             steps{
-                sh 'docker stop ganeshghube23/petshop:latest && docker rm ganeshghube23/petshop:latest'
+               // sh 'docker stop ganeshghube23/petshop:latest && docker rm ganeshghube23/petshop:latest'
                 sh 'docker run -d --name pet1 -p 8080:8080 ganeshghube23/petshop:latest'
             }
         }
